@@ -140,7 +140,7 @@ func _make_tower(center: Vector3, slope_side: float) -> void:
 		for dz in [-3.5, 3.5]:
 			_solid_box(center + Vector3(dx, 1.85, dz), Vector3(0.85, 3.8, 0.85), stone)
 	# Ramp rises toward the tower and is walkable.
-	_solid_box(center + Vector3(0, 1.95, 8.5 * slope_side), Vector3(3.4, 0.48, 17.5), stone, -0.22 * slope_side)
+	_solid_box(center + Vector3(0, 1.95, 8.5 * slope_side), Vector3(3.4, 0.48, 17.5), stone, 0.22 * slope_side)
 	for dx in [-4.1, 4.1]:
 		_solid_box(center + Vector3(dx, 4.6, 0), Vector3(0.4, 1.0, 9), Color(0.24, 0.33, 0.27))
 
