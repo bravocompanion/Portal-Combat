@@ -93,7 +93,7 @@ func _physics_process(delta: float) -> void:
 		armor = minf(max_armor, armor + shield_regen * delta)
 	if not is_on_floor():
 		velocity.y -= 23.0 * delta
-	elif Input.is_key_pressed(KEY_SPACE):
+	elif Input.is_physical_key_pressed(KEY_SPACE):
 		velocity.y = 7.0
 	var forward := -global_transform.basis.z
 	forward.y = 0.0
@@ -101,11 +101,11 @@ func _physics_process(delta: float) -> void:
 	var right := global_transform.basis.x
 	right.y = 0.0
 	var axis := Vector2(
-		float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A)),
-		float(Input.is_key_pressed(KEY_W)) - float(Input.is_key_pressed(KEY_S))
+		float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
+		float(Input.is_physical_key_pressed(KEY_W)) - float(Input.is_physical_key_pressed(KEY_S))
 	)
 	var direction := (right * axis.x + forward * axis.y).normalized()
-	var sprint := 1.45 if Input.is_key_pressed(KEY_SHIFT) else 1.0
+	var sprint := 1.45 if Input.is_physical_key_pressed(KEY_SHIFT) else 1.0
 	var pace := 7.3 * speed_scale * sprint
 	velocity.x = move_toward(velocity.x, direction.x * pace, 23.0 * delta)
 	velocity.z = move_toward(velocity.z, direction.z * pace, 23.0 * delta)
