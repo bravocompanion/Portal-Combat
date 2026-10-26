@@ -125,7 +125,7 @@ func _shoot() -> void:
 	query.exclude = [get_rid()]
 	var result := get_world_3d().direct_space_state.intersect_ray(query)
 	if not result.is_empty() and result.collider.has_method("take_damage"):
-		result.collider.take_damage(27.0 * damage_scale, self)
+		result.collider.call("take_damage", 27.0 * damage_scale, self)
 	if ammo <= 0:
 		_start_reload()
 
@@ -159,9 +159,10 @@ func _pulse() -> void:
 		return
 	pulse_cooldown = 17.0
 	for target in get_tree().get_nodes_in_group("bots"):
-		if is_instance_valid(target) and global_position.distance_to(target.global_position) < 8.5:
-			target.take_damage(33.0 * damage_scale, self)
-			target.stun(1.2)
+		var bot := target as Node3D
+		if is_instance_valid(bot) and global_position.distance_to(bot.global_position) < 8.5:
+			bot.call("take_damage", 33.0 * damage_scale, self)
+			bot.call("stun", 1.2)
 	message.emit("Rift Pulse activated")
 
 func _heal() -> void:
