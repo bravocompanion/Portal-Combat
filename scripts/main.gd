@@ -208,13 +208,13 @@ func _make_bots() -> void:
 		bot.defeated.connect(_bot_defeated)
 		bots_left += 1
 
-func _bot_defeated(bot: Node3D, killer: Node) -> void:
+func _bot_defeated(bot: Node, killer: Node) -> void:
 	bots_left -= 1
 	if killer == player:
 		player.add_kill()
 		_display_notice("ELIMINATED! +50 XP +20 Rift Shards")
-	if is_instance_valid(bot):
-		_drop_loot(bot.global_position + Vector3.UP * 0.9, "crystal", 16)
+	if is_instance_valid(bot) and bot is Node3D:
+		_drop_loot((bot as Node3D).global_position + Vector3.UP * 0.9, "crystal", 16)
 	if bots_left <= 0:
 		_finish_match(true)
 
@@ -397,8 +397,9 @@ func _process(delta: float) -> void:
 		if Vector2(player.global_position.x, player.global_position.z).length() > storm_radius:
 			player.take_damage(7.0 * delta)
 		for bot in get_tree().get_nodes_in_group("bots"):
-			if Vector2(bot.global_position.x, bot.global_position.z).length() > storm_radius:
-				bot.take_damage(3.0 * delta)
+			var actor := bot as Node3D
+			if is_instance_valid(actor) and Vector2(actor.global_position.x, actor.global_position.z).length() > storm_radius:
+				actor.call("take_damage", 3.0 * delta)
 	if hud_text != null:
 		hud_text.text = "PORTAL COMBAT  v1.0  |  %d opponents remaining\nHP %d/%d   ARMOR %d/%d   AMMO %d/%d (+%d)\nLV %d   XP %d   KILLS %d   SHARDS %d\nBLINK [Q] %.0fs   PULSE [E] %.0fs   STORM %.0fm" % [
 			bots_left, ceili(player.health), ceili(player.max_health),
