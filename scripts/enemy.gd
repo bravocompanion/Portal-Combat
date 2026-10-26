@@ -66,7 +66,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, 15.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 15.0 * delta)
 	elif is_instance_valid(target):
-		var offset := target.global_position - global_position
+		var offset: Vector3 = target.global_position - global_position
 		offset.y = 0.0
 		var distance := offset.length()
 		var move_dir := offset.normalized()
@@ -89,19 +89,20 @@ func _acquire_target() -> void:
 	for fighter in get_tree().get_nodes_in_group("fighters"):
 		if fighter == self or not is_instance_valid(fighter):
 			continue
-		if fighter.get("health") == null or fighter.health <= 0.0:
+		if not fighter is Node3D or fighter.get("health") == null or float(fighter.get("health")) <= 0.0:
 			continue
-		var distance := global_position.distance_to(fighter.global_position)
+		var fighter_3d := fighter as Node3D
+		var distance := global_position.distance_to(fighter_3d.global_position)
 		if distance < best:
 			best = distance
-			target = fighter
+			target = fighter_3d
 
 func _attack() -> void:
 	attack_timer = randf_range(0.9, 1.5)
 	if not is_instance_valid(target):
 		return
 	var origin := global_position + Vector3.UP * 1.45
-	var destination := target.global_position + Vector3.UP * 1.0
+	var destination: Vector3 = target.global_position + Vector3.UP * 1.0
 	var query := PhysicsRayQueryParameters3D.create(origin, destination)
 	query.exclude = [get_rid()]
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
