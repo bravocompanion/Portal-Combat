@@ -15,7 +15,7 @@ const TALENTS := {
 	"Vital Roots": "+30 maximum health"
 }
 var rng := RandomNumberGenerator.new()
-var player: CharacterBody3D
+var player
 var bots_left := 0
 var elapsed := 0.0
 var storm_radius := 55.0
@@ -208,7 +208,7 @@ func _make_bots() -> void:
 		bot.defeated.connect(_bot_defeated)
 		bots_left += 1
 
-func _bot_defeated(bot: Node, killer: Node) -> void:
+func _bot_defeated(bot: Node3D, killer: Node) -> void:
 	bots_left -= 1
 	if killer == player:
 		player.add_kill()
