@@ -7,7 +7,7 @@ var portal_lock := 0.0
 var stun_timer := 0.0
 var attack_timer := 0.0
 var scan_timer := 0.0
-var target: Node3D
+var target
 var visual: Node3D
 var base_color := Color(0.72, 0.27, 0.24)
 var dead := false
@@ -106,7 +106,7 @@ func _attack() -> void:
 	query.exclude = [get_rid()]
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if not hit.is_empty() and hit.collider == target and randf() < 0.73:
-		target.take_damage(randf_range(7.0, 12.0), self)
+		target.call("take_damage", randf_range(7.0, 12.0), self)
 
 func take_damage(amount: float, attacker: Node = null) -> void:
 	if dead:
