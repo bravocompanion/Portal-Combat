@@ -1,6 +1,6 @@
 extends Area3D
 
-var linked: Area3D
+var linked
 var exit_direction := Vector3.FORWARD
 var tint := Color(0.13, 0.81, 0.97)
 
@@ -44,4 +44,4 @@ func _ready() -> void:
 
 func _entered(body: Node3D) -> void:
 	if is_instance_valid(linked) and body.has_method("portal_travel"):
-		body.portal_travel(linked.global_position + linked.exit_direction.normalized() * 2.8, linked.exit_direction.normalized())
+		body.call("portal_travel", linked.global_position + linked.exit_direction.normalized() * 2.8, linked.exit_direction.normalized())
